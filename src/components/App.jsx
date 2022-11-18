@@ -1,19 +1,54 @@
+import { useState, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-// import styled from "styled-components";
+import { Container, Header, Link } from "./App.styled";
 import { Home } from "../pages/Home";
 import { Movies } from "../pages/Movies";
-import { Container, Header, Link } from "./App.styled";
+import { MovieDetails } from "pages/MovieDetails";
+import axiosGetTrendingMovies from "../services/api"
+import { Cast } from "pages/Cast";
+import { Reviews } from "pages/Reviews";
 
-
+// import styled from "styled-components";
 // const StyledLink = styled(NavLink)`
 //   color: black;
-
 //   &.active {
 //     color: orange;
 //   }
 // `;
 
-export const App = () => {
+export function App() {
+  const [loading, setLoading] = useState(false);
+  const [movies, setMovies] = useState([]);
+
+  const responseTrendingMovies = (data) => {
+    const { page, results } = data;
+
+    console.log(page);
+    console.log(results);
+    
+    setMovies([...results]);
+  }
+
+  useEffect(() => {
+    // if (searchValue !== '') {
+      setLoading(true);
+      axiosGetTrendingMovies()
+        .then(data => {
+          console.log(loading);
+          console.log(data);
+          responseTrendingMovies(data.data);
+        })
+        .catch(error => {
+          console.log(error);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    // }
+  // eslint-disable-next-line
+  }, []);
+
+
   return (
     <Container>
       <Header>
@@ -25,26 +60,23 @@ export const App = () => {
       </Header>
 
       <Routes>
-        <Route path="/" element={<Home />}></Route>
+        <Route path="/" element={<Home movies={movies}/>}></Route>
         <Route path="/movies" element={<Movies />}></Route>
+        <Route path="/movies/:movieId" element={<MovieDetails />}></Route>
+        <Route path="/movies/:movieId/cast" element={<Cast />}></Route>
+        <Route path="/movies/:movieId/reviews" element={<Reviews />}></Route>
         <Route path="*" element={<Home />}></Route>
       </Routes>
-      <div>
-
-
-        (body)
-        Trending today
-
-        <ul>
-          listMovies
-        </ul>
-
-      </div>
     </Container>
   );
 };
 
 /*
+Ключ API (v3 auth) <<api_key>>
+952628f2e449efc757df6f6ed1cc0d2c
+
+https://api.themoviedb.org/3/trending/all/day?api_key=952628f2e449efc757df6f6ed1cc0d2c
+
 /trending/get-trending список самых популярных фильмов на сегодня для создания 
 коллекции на главной странице.
 

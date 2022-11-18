@@ -1,13 +1,21 @@
 
-export const Home = () => {
+export const Home = ({ movies }) => {
     return (
         <main>
-            <h1>Home</h1>
-            <p>
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Iusto,
-                laboriosam placeat incidunt rem illum animi nemo quibusdam quia
-                voluptatum voluptate.
-            </p>
+            <h1>Trending today</h1>
+            <ul className="Movies">
+                {movies.map(({ id, title, name }) => (
+                    <li className="MovieItem" key={id}>
+                        {/* <img
+                            src={webformatURL}
+                            alt={tags}
+                            className="MovieItem-image"
+                            loading="lazy" 
+                        /> */}
+                        <p>{ title ? title : name}</p>
+                    </li>
+                ))}
+            </ul>
         </main>
     );
 };
