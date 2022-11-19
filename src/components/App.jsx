@@ -4,9 +4,10 @@ import { Container, Header, Link } from "./App.styled";
 import { Home } from "../pages/Home";
 import { Movies } from "../pages/Movies";
 import { MovieDetails } from "pages/MovieDetails";
-import axiosGetTrendingMovies from "../services/api"
+import { getTmdbTrendingMovies, getTmdbGenres } from "../services/api"
 import { Cast } from "pages/Cast";
 import { Reviews } from "pages/Reviews";
+import Loader from "./Loader/Loader";
 
 // import styled from "styled-components";
 // const StyledLink = styled(NavLink)`
@@ -19,32 +20,34 @@ import { Reviews } from "pages/Reviews";
 export function App() {
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
-
-  const responseTrendingMovies = (data) => {
-    const { page, results } = data;
-
-    console.log(page);
-    console.log(results);
-    
-    setMovies([...results]);
-  }
+  const [genres, setGenres] = useState([]);
 
   useEffect(() => {
-    // if (searchValue !== '') {
-      setLoading(true);
-      axiosGetTrendingMovies()
-        .then(data => {
-          console.log(loading);
-          console.log(data);
-          responseTrendingMovies(data.data);
-        })
-        .catch(error => {
-          console.log(error);
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    // }
+    setLoading(true);
+
+    getTmdbTrendingMovies()
+      .then(data => {
+        const movies = data.data.results;
+        console.log('Movies', movies);
+        setMovies([...movies]);
+      })
+      .catch(error => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+    
+    getTmdbGenres()
+      .then(data => {
+        const genres = data.data.genres;
+        console.log('Genres', genres);
+        setGenres([...genres])
+      })
+      .catch(error => {
+        console.log(error);
+      })
+
   // eslint-disable-next-line
   }, []);
 
@@ -65,8 +68,9 @@ export function App() {
         <Route path="/movies/:movieId" element={<MovieDetails />}></Route>
         <Route path="/movies/:movieId/cast" element={<Cast />}></Route>
         <Route path="/movies/:movieId/reviews" element={<Reviews />}></Route>
-        <Route path="*" element={<Home />}></Route>
+        <Route path="*" element={<Home movies={movies}/>}></Route>
       </Routes>
+      {loading && <Loader />}
     </Container>
   );
 };
