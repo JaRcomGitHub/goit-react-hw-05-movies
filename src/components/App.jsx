@@ -4,7 +4,7 @@ import { Container, Header, Link } from "./App.styled";
 import { Home } from "../pages/Home";
 import { Movies } from "../pages/Movies";
 import { MovieDetails } from "pages/MovieDetails";
-import { getTmdbTrendingMovies, getTmdbGenres } from "../services/api"
+import { getTmdbTrendingMovies } from "../services/api"
 import { Cast } from "pages/Cast";
 import { Reviews } from "pages/Reviews";
 import Loader from "./Loader/Loader";
@@ -20,7 +20,7 @@ import Loader from "./Loader/Loader";
 export function App() {
   const [loading, setLoading] = useState(false);
   const [movies, setMovies] = useState([]);
-  const [genres, setGenres] = useState([]);
+  // const [genres, setGenres] = useState([]);
 
   useEffect(() => {
     setLoading(true);
@@ -38,15 +38,15 @@ export function App() {
         setLoading(false);
       });
     
-    getTmdbGenres()
-      .then(data => {
-        const genres = data.data.genres;
-        console.log('Genres', genres);
-        setGenres([...genres])
-      })
-      .catch(error => {
-        console.log(error);
-      })
+    // getTmdbGenres()
+    //   .then(data => {
+    //     const genres = data.data.genres;
+    //     console.log('Genres', genres);
+    //     setGenres([...genres])
+    //   })
+    //   .catch(error => {
+    //     console.log(error);
+    //   })
 
   // eslint-disable-next-line
   }, []);
