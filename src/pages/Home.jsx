@@ -4,7 +4,7 @@ import { Loader } from "components/Loader/Loader";
 import { MovieList, MovieListItem } from "components/App.styled";
 import { getTmdbTrendingMovies } from "services/api"
 
-export const Home = () => {
+const Home = () => {
     const [loading, setLoading] = useState(false);
     const [movies, setMovies] = useState([]);
     
@@ -39,3 +39,5 @@ export const Home = () => {
         </main>
     );
 };
+
+export default Home;

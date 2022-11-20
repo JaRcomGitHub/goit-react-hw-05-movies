@@ -4,7 +4,7 @@ import { Loader } from "components/Loader/Loader";
 import { SearchFormInput, SearchFormButton, MovieList, MovieListItem } from "components/App.styled";
 import { getTmdbMovieSearch } from "services/api";
 
-export const Movies = () => {
+const Movies = () => {
     const [loading, setLoading] = useState(false);
     const [movies, setMovies] = useState([]);
     const [searchValue, setSearchValue] = useState('');
@@ -77,3 +77,5 @@ export const Movies = () => {
         </main>
     );
 };
+
+export default Movies;

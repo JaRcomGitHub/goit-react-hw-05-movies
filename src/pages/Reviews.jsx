@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Loader } from "components/Loader/Loader";
 import { getTmdbMovieIdReviews } from "services/api"
 
-export const Reviews = () => {
+const Reviews = () => {
     const { movieId } = useParams();
     const [loading, setLoading] = useState(false);
     const [reviews, setReviews] = useState([]);
@@ -42,3 +42,5 @@ export const Reviews = () => {
         </div>
     );
 };
+
+export default Reviews;

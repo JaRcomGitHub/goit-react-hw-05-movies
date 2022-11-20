@@ -4,7 +4,7 @@ import { Loader } from "components/Loader/Loader";
 import { getTmdbMovieIdCredits, baseImageTmdbURL_l } from "services/api"
 import { CastList, CastListItem, CastName, CastCharacter } from "components/App.styled";
 
-export const Cast = () => {
+const Cast = () => {
     const { movieId } = useParams();
     const [loading, setLoading] = useState(false);
     const [cast, setCast] = useState([]);
@@ -48,3 +48,5 @@ export const Cast = () => {
         </div>
     );
 };
+
+export default Cast;

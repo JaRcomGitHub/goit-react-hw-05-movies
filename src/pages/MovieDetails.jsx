@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { Link, Outlet } from "react-router-dom";
 import { getTmdbMovieId, baseImageTmdbURL_m } from "services/api";
 import { Loader } from "components/Loader/Loader";
 import { GenresList, MovieCard, LinkGoBack } from "components/App.styled";
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
     const { movieId } = useParams();
     const [loading, setLoading] = useState(false);
     const [movieDetails, setMovieDetails] = useState();
@@ -68,9 +68,13 @@ export const MovieDetails = () => {
                     <hr/>
                 </div>
 
-                <Outlet />
+                <Suspense fallback={<div>Loading page...</div>}>
+                    <Outlet />
+                </Suspense>
             </>
             }
         </div>
     );
 };
+
+export default MovieDetails;
