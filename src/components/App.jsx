@@ -21,9 +21,10 @@ export function App() {
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/movies" element={<Movies />}></Route>
-        <Route path="/movies/:movieId" element={<MovieDetails />}></Route>
-        <Route path="/movies/:movieId/cast" element={<MovieDetails><Cast /></MovieDetails>}></Route>
-        <Route path="/movies/:movieId/reviews" element={<MovieDetails><Reviews /></MovieDetails>}></Route>
+        <Route path="/movies/:movieId" element={<MovieDetails />}>
+          <Route path="cast" element={<Cast />}></Route>
+          <Route path="reviews" element={<Reviews />}></Route>
+        </Route>
         <Route path="*" element={<Home />}></Route>
       </Routes>
     </Container>
@@ -31,14 +32,6 @@ export function App() {
 };
 
 /*
-
-  Маршруты
-
-'/movies' - компонент Movies, страница поиска фильмов по ключевому слову.
-
-/movies/:movieId/reviews - компонент Reviews, информация об обзорах. 
-Рендерится на странице MovieDetails.
-
 
   Code Splitting (разделение кода)
 

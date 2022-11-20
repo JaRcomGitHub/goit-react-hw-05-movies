@@ -1,14 +1,15 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useSearchParams } from "react-router-dom";
 import { Loader } from "components/Loader/Loader";
-import { SearchFormInput, SearchFormButton } from "components/App.styled";
-import { getTmdbTrendingMovies } from "services/api";
+import { SearchFormInput, SearchFormButton, MovieList, MovieListItem } from "components/App.styled";
+import { getTmdbMovieSearch } from "services/api";
 
-//{ onSubmit }
 export const Movies = () => {
-    const [searchValue, setSearchValue] = useState('');
     const [loading, setLoading] = useState(false);
     const [movies, setMovies] = useState([]);
+    const [searchValue, setSearchValue] = useState('');
+    const [searchParams, setSearchParams] = useSearchParams();
+    const query = searchParams.get("query") ?? "";
 
     const handleInputChange = event => {
         setSearchValue(event.currentTarget.value);
@@ -16,26 +17,32 @@ export const Movies = () => {
 
     const handleSubmit = event => {
         event.preventDefault();
-
         if (searchValue.trim() !== '') {
-            //onSubmit(searchValue);
-            console.log('searchValue', searchValue);
-
-            setLoading(true);
-            getTmdbTrendingMovies()
-                .then(data => {
-                    const movies = data.data.results;
-                    console.log('Search', movies);
-                    setMovies([...movies]);
-                })
-                .catch(error => {
-                    console.log(error);
-                })
-                .finally(() => {
-                    setLoading(false);
-                });
+            //console.log('searchValue', searchValue);
+            setSearchParams({ query: searchValue });
+            // const form = event.currentTarget;
+            // setSearchParams({ query: form.elements.searchValue.value });
+            // form.reset();
         }
     }
+
+    useEffect(() => {
+        if (query === "") return;
+
+        setLoading(true);
+        getTmdbMovieSearch(query)
+            .then(data => {
+                const movies = data.data.results;
+                //console.log('Search', movies);
+                setMovies([...movies]);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, [query]);
 
     return (
         <main>
@@ -54,16 +61,18 @@ export const Movies = () => {
                 </SearchFormButton>
             </form>
             {loading && <Loader />}
+            {loading === false && movies.length === 0 && query !== "" &&
+                <p>We don't have any movie for this search.</p>}
             {movies.length > 0 &&
-                <ul>
+                <MovieList>
                     {movies.map(({ id, title }) => (
-                        <li key={id}>
-                            <Link to={`/movies/${id}`}>
-                                <p>{title}</p>
+                        <MovieListItem key={id}>
+                            <Link to={`/movies/${id}`} state={{ from: `/movies?query=${query}` }}>
+                                {title}
                             </Link>
-                        </li>
+                        </MovieListItem>
                     ))}
-                </ul>
+                </MovieList>
             }
         </main>
     );

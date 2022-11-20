@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
+import { Link, Outlet } from "react-router-dom";
 import { getTmdbMovieId, baseImageTmdbURL_m } from "services/api";
 import { Loader } from "components/Loader/Loader";
 import { GenresList, MovieCard, LinkGoBack } from "components/App.styled";
 
-export const MovieDetails = ({children}) => {
+export const MovieDetails = () => {
     const { movieId } = useParams();
     const [loading, setLoading] = useState(false);
     const [movieDetails, setMovieDetails] = useState();
-    // const [error, setError] = useState();
+    const [backLinkHref] = useState(useLocation().state?.from ?? "/");
     
     useEffect(() => {
         setLoading(true);
@@ -30,9 +30,9 @@ export const MovieDetails = ({children}) => {
 
     return (
         <div>
-            <LinkGoBack to={`/`}>← Go back</LinkGoBack>
+            <LinkGoBack to={backLinkHref}>← Go back</LinkGoBack>
             {loading && <Loader />}
-            {loading === false && !movieDetails && <p>sorry, this movie not found</p>}
+            {loading === false && !movieDetails && <p>sorry, this movie ID not found</p>}
             {movieDetails &&
             <>
                 <MovieCard>
@@ -62,14 +62,13 @@ export const MovieDetails = ({children}) => {
                     <hr/>
                     <p>Additional information</p>
                     <ul>
-                        <li><Link to={`/movies/${movieDetails.id}/cast`}>Cast</Link></li>
-                        <li><Link to={`/movies/${movieDetails.id}/reviews`}>Reviews</Link></li>
+                        <li><Link to="cast">Cast</Link></li>
+                        <li><Link to="reviews">Reviews</Link></li>
                     </ul>
                     <hr/>
                 </div>
-                <div>
-                    {children}
-                </div>
+
+                <Outlet />
             </>
             }
         </div>

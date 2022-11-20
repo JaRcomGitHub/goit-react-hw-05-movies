@@ -29,6 +29,7 @@ export const Cast = () => {
     return (
         <div>
             {loading && <Loader />}
+            {loading === false && cast.length === 0 && <p>We don't have any cast for this movie.</p>}
             {cast.length > 0 && 
                 <CastList>
                     {cast.map(({ name, character, profile_path }, index) => (

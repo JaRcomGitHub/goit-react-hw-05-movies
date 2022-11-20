@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Loader } from "components/Loader/Loader";
+import { MovieList, MovieListItem } from "components/App.styled";
 import { getTmdbTrendingMovies } from "services/api"
 
 export const Home = () => {
@@ -27,15 +28,13 @@ export const Home = () => {
     return (
         <main>
             <h1>Trending today</h1>
-            <ul className="Movies">
+            <MovieList>
                 {movies.map(({ id, title }) => (
-                    <li className="MovieItem" key={id}>
-                        <Link to={`/movies/${id}`}>
-                            <p>{title}</p>
-                        </Link>
-                    </li>
+                    <MovieListItem key={id}>
+                        <Link to={`/movies/${id}`}>{title}</Link>
+                    </MovieListItem>
                 ))}
-            </ul>
+            </MovieList>
             {loading && <Loader />}
         </main>
     );

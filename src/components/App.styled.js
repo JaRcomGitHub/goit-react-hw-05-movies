@@ -97,3 +97,11 @@ export const SearchFormButton = styled.button`
   font-size: 16px;
   border: 1px solid grey;
 `;
+
+export const MovieList = styled.ul`
+  padding-left: 30px;
+`;
+
+export const MovieListItem = styled.li`
+  padding: 4px;
+`;
